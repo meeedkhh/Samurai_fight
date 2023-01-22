@@ -128,28 +128,28 @@ int gameLoop(int argc, char** argv, Character playerOneSel, Character playerTwoS
 
 		window.draw();
 
-		if (playerOne.getEventID() == Event::attack) {
+		if (playerOne.getEventID() == Event::attack && t==false) {
 			Hitbox hitbox1(playerOneSel, 0, playerOne.getXpos(), playerOne.getYpos(), playerOne.getFlip());
 			hitbox1.draw();
-			if ((hurtBoxPlayerTwo.collide(hitbox1) ) && t==false){
+			
+			if (hurtBoxPlayerTwo.collide(hitbox1) ){
 				t=true;
-
+				playerTwo.takeHit(playerTwoSel, playerOne.getDamage(), playerTwo);
 			}
 		}
-		if (playerTwo.getEventID() == Event::attack) {
+		if (playerTwo.getEventID() == Event::attack   && s==false) {
 			Hitbox hitbox2(playerTwoSel, 1, playerTwo.getXpos(), playerTwo.getYpos(), playerTwo.getFlip());
 			hitbox2.draw();
-			if ((hurtBoxPlayerOne.collide(hitbox2)) && s==false){
+			
+			if (hurtBoxPlayerOne.collide(hitbox2) ){
 				s=true;
-		
+				playerOne.takeHit(playerOneSel, playerTwo.getDamage(), playerOne);
 			}
 		}
 		if(t==true){
-			playerTwo.takeHit(playerTwoSel, playerOne.getDamage(), playerTwo);
 			t=false;
 		}
 		if(s==true){
-			playerOne.takeHit(playerOneSel, playerTwo.getDamage(), playerOne);
 			s=false;
 		}
 

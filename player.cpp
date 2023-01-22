@@ -7,22 +7,22 @@ Player::Player(int xPos, int yPos, const char * texture, SDL_RendererFlip flip, 
 	switch (character) {
 	case Character::knight:
 		_health = 100;
-		_damage = 10;
+		_damage = 1;
 		break;
 	case Character::samurai:
-		_health = 200;
-		_damage = 10;
+		_health = 100;
+		_damage = 1;
 		break;
 	case Character::huntress:
-		_health = 200;
-		_damage = 10;
+		_health = 100;
+		_damage = 1;
 		break;
 	default: break;
 	}
 
 	auto surface = IMG_Load(texture);
 	_pTexture = SDL_CreateTextureFromSurface(Window::renderer, surface);
-	SDL_FreeSurface(surface);
+//	SDL_FreeSurface(surface);
 }
 
 Player::~Player()
@@ -246,8 +246,9 @@ void Player::pollEventsP2(SDL_Event &event)
 
 void Player::takeHit(Character character, int damage, Player &player)
 {
+	setattack(false);
+//	_attack =false;
 	_eventID = Event::idle;
-	_attack =false;
 	_health -= damage;
 	std::cout<<"damage is  "<<_health<<std::endl;
 	

@@ -21,7 +21,7 @@ class Player : public Hero
 public:
 	Player(int xPos, int yPos, const char * texture, SDL_RendererFlip flip, Character character, int playerID);
 	~Player();
-
+	
 	void draw(int &x, Event &saveEvent, int &animDelay);
 
 	void drawKnight(int &x, Event &saveEvent, int &animDelay);

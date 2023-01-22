@@ -47,8 +47,9 @@ Hitbox::Hitbox(Character character, int playerID, int currXpos, int currYpos, SD
 
 Hitbox::~Hitbox()
 {
-	_width=0;
-	_length=0;
+
+	_hitbox.w=0;
+	_hitbox.h=0;
 }
 
 void Hitbox::draw() const
@@ -56,3 +57,32 @@ void Hitbox::draw() const
 	SDL_RenderDrawRect(Window::renderer, &_hitbox);
 	SDL_RenderFillRect(Window::renderer, &_hitbox);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
