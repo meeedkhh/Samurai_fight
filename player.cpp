@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iostream>
+#include <SDL_mixer.h>
 Player::Player(int xPos, int yPos, const char * texture, SDL_RendererFlip flip, Character character, int playerID)
 	: _xPos(xPos), _yPos(yPos), _running(false), _attack(false), _eventID(Event::idle),
 	  _flip(flip), _character(character), _playerID(playerID), _size(1), _alive(true)
@@ -10,11 +11,11 @@ Player::Player(int xPos, int yPos, const char * texture, SDL_RendererFlip flip, 
 		_damage = 1;
 		break;
 	case Character::samurai:
-		_health = 100;
+		_health = 200;
 		_damage = 1;
 		break;
 	case Character::huntress:
-		_health = 100;
+		_health = 200;
 		_damage = 1;
 		break;
 	default: break;
@@ -22,7 +23,7 @@ Player::Player(int xPos, int yPos, const char * texture, SDL_RendererFlip flip, 
 
 	auto surface = IMG_Load(texture);
 	_pTexture = SDL_CreateTextureFromSurface(Window::renderer, surface);
-//	SDL_FreeSurface(surface);
+	SDL_FreeSurface(surface);
 }
 
 Player::~Player()
@@ -204,17 +205,36 @@ void Player::pollEventsP1(SDL_Event &event)
 		_velx = -7;
 		_flip = SDL_FLIP_HORIZONTAL;
 	}
-	else if (keyState[SDL_SCANCODE_SPACE]) {
-		_eventID = Event::attack;
-		_velx = 0;
-		_attack = true;
-	}
+//	else if (keyState[SDL_SCANCODE_SPACE]) {
+//		_eventID = Event::attack;
+//		_velx = 0;
+//		_attack = true;
+//	}
 	else {
 		_eventID = Event::idle;
 		_velx = 0;
 		_attack = false;
 	}
+	
+	
+	 if (event.type == SDL_KEYDOWN) {
+                switch (event.key.keysym.sym) {
+                    case SDLK_SPACE:    
+					    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+                        _eventID = Event::attack;
+		                _velx = 0;
+						_attack = true;
+						  Mix_Chunk* sound = Mix_LoadWAV("Assets/knife1.wav");
+                          Mix_PlayChannel(-1, sound, 0);
+//          				 while (Mix_Playing(-1)) {
+//        					SDL_Delay(0.01);
+//    						}
+                        break;
 
+                }
+            }
+	
+	
 	SDL_PumpEvents();
 }
 
@@ -232,27 +252,46 @@ void Player::pollEventsP2(SDL_Event &event)
 		_velx = -7;
 		_flip = SDL_FLIP_HORIZONTAL;
 	}
-	else if (keyState[SDL_SCANCODE_K]) {
-		_eventID = Event::attack;
-		_velx = 0;
-		_attack = true;
-	}
+//	else if (keyState[SDL_SCANCODE_K]) {
+//		_eventID = Event::attack;
+//		_velx = 0;
+//		_attack = true;
+//	}
 	else {
 		_eventID = Event::idle;
 		_velx = 0;
 		_attack = false;
 	}
+	 if (event.type == SDL_KEYDOWN) {
+                switch (event.key.keysym.sym) {
+                    case SDLK_k:    
+					    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 5, 2048);
+                        _eventID = Event::attack;
+		                _velx = 0;
+						_attack = true;
+						  Mix_Chunk* sound = Mix_LoadWAV("Assets/knife2.wav");
+                          Mix_PlayChannel(5, sound, 0);
+//          				 while (Mix_Playing(-1)) {
+//        					SDL_Delay(0.01);
+//    						}
+                        break;
+
+                }
+            }
 }
 
-void Player::takeHit(Character character, int damage, Player &player)
+void Player::takeHit(Character character, float damage, Player &player)
 {
-	setattack(false);
-//	_attack =false;
-	_eventID = Event::idle;
+
 	_health -= damage;
 	std::cout<<"damage is  "<<_health<<std::endl;
 	
 	if (_health <= 0) {
+		if(_health == 0){
+					Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 5, 2048);
+		Mix_Chunk* sound = Mix_LoadWAV("Assets/death.wav");
+        Mix_PlayChannel(5, sound, 0);
+		}
 		_eventID = Event::death;
 		
 	}

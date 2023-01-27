@@ -16,7 +16,8 @@ Window::~Window()
 }
 
 bool Window::init()
-{
+{   
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		std::cout << "Subsystems Initialised" << std::endl;
 	}

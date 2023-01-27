@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 class Window
 {
@@ -43,8 +44,8 @@ private:
 	bool init();
 
 	const char * _title;
-	int _width = 1920;
-	int _height = 1080;
+	int _width = 640;
+	int _height = 640;
 
 	bool _running;
 

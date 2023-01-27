@@ -54,8 +54,8 @@ Hitbox::~Hitbox()
 
 void Hitbox::draw() const
 {
-	SDL_RenderDrawRect(Window::renderer, &_hitbox);
-	SDL_RenderFillRect(Window::renderer, &_hitbox);
+	//SDL_RenderDrawRect(Window::renderer, &_hitbox);
+	//SDL_RenderFillRect(Window::renderer, &_hitbox);
 }
 
 

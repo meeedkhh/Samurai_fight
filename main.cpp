@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SDL.h>
-
+#include <SDL_mixer.h>
 #include "Window.h"
 #include "Hero.h"
 #include "Knight.h"
@@ -12,8 +12,8 @@
 #include "Hurtbox.h"
 #include "Charbackground.h"
 
-SDL_Event event;
 
+SDL_Event event;
 Window window("MED_GAME", 1980,1080);
 
 int mainMenu(int argc, char** argv); //forward declaration
@@ -23,17 +23,17 @@ int helpScreen(int argc, char** argv); //forward declaration
 static bool t=false;
 static bool s=false;
 bool oussama=false;
-
+Mix_Chunk* soundref=NULL;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int gameLoop(int argc, char** argv, Character playerOneSel, Character playerTwoSel)
-{
+{   
 	const int FPS = 40;
 	const int frameDelay = 1000 / FPS;
 
 	Uint32 frameStart;
 	int frameTime;
 
-	window.setWindowTexture("Assets/backgroundGameScene1.png");
+	window.setWindowTexture("Assets/backgroundGameScene1.bmp");
 
 	int sInitial = 0; //120;
 
@@ -43,7 +43,7 @@ int gameLoop(int argc, char** argv, Character playerOneSel, Character playerTwoS
 	int kAnimDel = 0; //animation delay: knight
 	int sAnimDel = 0; //animation delay: samurai
 
-	const char * knightTexture = "Assets/knight.png";
+	const char * knightTexture = "Assets/knightbleu.png";
 	const char * samuraiTexture = "Assets/samurai.png";
 	const char * huntressTexture = "Assets/huntress.png";
 
@@ -120,9 +120,7 @@ int gameLoop(int argc, char** argv, Character playerOneSel, Character playerTwoS
 
 	Event pOneSaveEvent = playerOne.getEventID(); //Save player 1's last event
 	Event pTwoSaveEvent = playerTwo.getEventID(); //Save player 2's last event
-
-	//Hitbox hitbox(playerOneSel, 0);
-
+ 
 	while (window.isRunning()) {
 		frameStart = SDL_GetTicks();
 
@@ -131,8 +129,9 @@ int gameLoop(int argc, char** argv, Character playerOneSel, Character playerTwoS
 		if (playerOne.getEventID() == Event::attack && t==false) {
 			Hitbox hitbox1(playerOneSel, 0, playerOne.getXpos(), playerOne.getYpos(), playerOne.getFlip());
 			hitbox1.draw();
-			
+
 			if (hurtBoxPlayerTwo.collide(hitbox1) ){
+				std::cout<<"call 2";
 				t=true;
 				playerTwo.takeHit(playerTwoSel, playerOne.getDamage(), playerTwo);
 			}
@@ -142,14 +141,17 @@ int gameLoop(int argc, char** argv, Character playerOneSel, Character playerTwoS
 			hitbox2.draw();
 			
 			if (hurtBoxPlayerOne.collide(hitbox2) ){
+				std::cout<<"call 2%";
 				s=true;
 				playerOne.takeHit(playerOneSel, playerTwo.getDamage(), playerOne);
 			}
 		}
 		if(t==true){
+			
 			t=false;
 		}
 		if(s==true){
+			
 			s=false;
 		}
 
@@ -195,7 +197,7 @@ int gameLoop(int argc, char** argv, Character playerOneSel, Character playerTwoS
 		if (frameDelay > frameTime)
 			SDL_Delay(frameDelay - frameTime);
 	}
-
+    
 	window.~Window();
 	playerOne.~Player();
 	playerTwo.~Player();
@@ -206,6 +208,8 @@ int gameLoop(int argc, char** argv, Character playerOneSel, Character playerTwoS
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int characterSelection(int argc, char** argv)
 {
+	
+
 	const int FPS = 60;
 	const int frameDelay = 1000 / FPS;
 
@@ -327,12 +331,23 @@ int characterSelection(int argc, char** argv)
 	}
 	char1.~Button();
 	char2.~Button();
-
+    Mix_OpenAudio(40000, MIX_DEFAULT_FORMAT, 2, 2048);
+    	    	Mix_FreeChunk(soundref);
+                Mix_CloseAudio();
+	Mix_Chunk* wooo = Mix_LoadWAV("Assets/wooo.wav");
+    Mix_PlayChannel(-1, wooo, 0);
 	return gameLoop(argc, argv, playerOne, playerTwo);
 }
 
 int mainMenu(int argc, char** argv)
-{
+{   
+    
+    Mix_OpenAudio(40000, MIX_DEFAULT_FORMAT, 4, 2048);
+	Mix_Chunk* sound = Mix_LoadWAV("Assets/background1.wav");
+    Mix_PlayChannel(4, sound, 0);
+    soundref=sound;
+	//Hitbox hitbox(playerOneSel, 0);
+
 	const int FPS = 60;
 	const int frameDelay = 1000 / FPS;
 
@@ -363,10 +378,16 @@ int mainMenu(int argc, char** argv)
 			SDL_Delay(frameDelay - frameTime);
 
 		if (SDL_PollEvent(&event)) {
-			if (buttonStart.pollEvents(event))
+			if (buttonStart.pollEvents(event)){
+//			    	Mix_FreeChunk(sound);
+//                    Mix_CloseAudio();
 				window.setCurWindow(Window::CurrWindow::game);
-			else if (buttonHelp.pollEvents(event))
-				window.setCurWindow(Window::CurrWindow::help);
+	}
+			else if (buttonHelp.pollEvents(event)){
+			
+		
+				    window.setCurWindow(Window::CurrWindow::help);
+				}
 			else if (buttonQuit.pollEvents(event))
 				window.terminate();
 		}
@@ -389,9 +410,9 @@ int mainMenu(int argc, char** argv)
 int helpScreen(int argc, char** argv)
 {
 	int buttonCentrePos = window.getWidth() / 2 - 128;
-
+     
 	Button buttonBack(buttonCentrePos, 600, "Assets/ButtonBack.png");
-
+    
 	while (window.isRunning()) {
 		window.draw();
 		buttonBack.draw();

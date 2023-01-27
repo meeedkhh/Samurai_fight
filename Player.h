@@ -31,7 +31,7 @@ public:
 	void pollEventsP1(SDL_Event &event);
 	void pollEventsP2(SDL_Event &event);
 	void move(Window &window);
-	void takeHit(Character character, int damage, Player& player);
+	void takeHit(Character character, float damage, Player& player);
 
 	void setSize(int sizeMultiplier) {
 		_size = sizeMultiplier;
@@ -41,9 +41,6 @@ public:
 	inline int getYpos() const { return _yPos; }
 	inline bool isRunning() const { return _running; }
 	inline bool attack() const { return _attack; }
-	inline bool setattack(bool s){
-		 _attack=s;
-	}
 	inline Event getEventID() const { return _eventID; }
 	inline int getHealth() const { return _health; }
 	inline int getDamage() const { return _damage; }
@@ -62,7 +59,7 @@ private:
 	int _size;
 
 	int _health = 0;
-	int _damage = 0;
+	float _damage = 0;
 
 	Character _character;
 

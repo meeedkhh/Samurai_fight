@@ -58,8 +58,8 @@ void Hurtbox::draw(Character character, int playerXpos)
 
 	_hurtbox = SDL_Rect{ _xPos, _yPos, _width, _length };
 
-	SDL_RenderDrawRect(Window::renderer, &_hurtbox);
-	SDL_RenderFillRect(Window::renderer, &_hurtbox);
+	//SDL_RenderDrawRect(Window::renderer, &_hurtbox);
+	//SDL_RenderFillRect(Window::renderer, &_hurtbox);
 }
 
 bool Hurtbox::collide(Hitbox hitbox)
@@ -70,7 +70,7 @@ bool Hurtbox::collide(Hitbox hitbox)
 		( _xPos + _width >= hitbox.getXpos() && _xPos + _width <= hitbox.getXpos() + hitbox.getWidth() )
 	   )
 	{
-		std::cout<<"collison";
+		//std::cout<<"collison";
 		return true;
 	}
 	return false;
